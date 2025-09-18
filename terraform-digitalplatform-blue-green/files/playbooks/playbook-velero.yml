@@ -1,0 +1,33 @@
+---
+- name: Install Velero on EKS with IRSA
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    region: "{{ region }}"
+    cluster_name: "{{ cluster_name }}"
+    s3_bucket: "{{ s3_bucket }}"
+    velero_role_arn: "{{ velero_role_arn }}"
+    sa_name: "{{ sa_name }}"
+    namespace: "{{ namespace }}"
+  tasks:
+    - name: Install Velero
+      ansible.builtin.shell: >
+        velero install
+        --kubeconfig /root/.kube/config 
+        --provider aws
+        --plugins velero/velero-plugin-for-aws:v1.2.1
+        --bucket {{ s3_bucket }}
+        --backup-location-config region={{ region }}
+        --snapshot-location-config region={{ region }}
+        --no-secret
+
+    - name: Annotate Velero service account with IRSA role
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config annotate serviceaccount -n {{ namespace }} {{ sa_name }}
+        eks.amazonaws.com/role-arn={{ velero_role_arn }}
+        --overwrite
+
+    - name: Restart Velero deployment to refresh IRSA token
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config rollout restart deployment/velero -n velero

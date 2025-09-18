@@ -1,0 +1,65 @@
+---
+- name: Apply Kubernetes artifacts with Git clone and verification
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    repo_url: "https://gitlabcloud.dialog.lk/infrastructure/terraform/digitalplatform-core-bg.git"
+    dest_dir: "/root/bluegreenaws"
+    obj_def_path: "/root/bluegreenaws/terraform-digitalplatform-blue-green/files/artifacts/non-production"
+    manifest_file: "namespace.yaml"
+    branch: "develop/clouddevops_3.2.1"
+
+  tasks:
+    - name: Ensure git is installed
+      yum:
+        name: git
+        state: present
+      vars:
+        ansible_python_interpreter: /usr/bin/python2
+
+    - name: Ensure required build tools are installed
+      yum:
+        name:
+          - gcc
+          - make
+          - openssl11
+          - openssl11-devel
+          - bzip2-devel
+          - libffi-devel
+          - wget
+        state: present
+      vars:
+        ansible_python_interpreter: /usr/bin/python2
+
+    - name: Initialize repo directory
+      file:
+        path: "{{ dest_dir }}"
+        state: directory
+        mode: '0755'
+      become: yes
+
+    - name: Clone the repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest_dir }}"
+        version: "{{ branch }}"
+        force: yes
+
+    - name: Check if manifest file exists
+      stat:
+        path: "{{ obj_def_path }}/{{ manifest_file }}"
+      register: manifest_stat
+
+    - name: Fail if manifest file is missing
+      fail:
+        msg: "Manifest file not found: {{ obj_def_path }}/{{ manifest_file }}"
+      when: not manifest_stat.stat.exists
+
+    - name: Apply namespace manifest
+      k8s:
+        state: present
+        src: "{{ obj_def_path }}/{{ manifest_file }}"
+        apply: true

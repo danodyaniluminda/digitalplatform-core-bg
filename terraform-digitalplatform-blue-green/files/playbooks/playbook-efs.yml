@@ -1,0 +1,77 @@
+---
+- name: Install EFS on EKS with IRSA
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    repo_url: https://github.com/mahinsat/bluegreenaws.git
+    dest_dir: /tmp/bluegreenaws/efs
+    obj_def_path: /tmp/bluegreenaws/efs/files/non-production/sub-system/artifacts
+    branch      : ESARME-11135
+    manifest_file: efs.yml
+    region: "{{ region }}"
+    cluster_name: "{{ cluster_name }}"
+    efs_role_arn: "{{ EFS_role_arn }}"
+    efs_csi_node_role_arn: "{{ efs_csi_node_role_arn }}"
+    efs_csi_node_sa_name: "{{ efs_csi_node_sa_name }}"
+    sa_name: "{{ sa_name }}"
+    namespace: "{{ namespace }}"
+  tasks:
+    - name: Annotate EFS service account with IRSA role
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config annotate serviceaccount -n {{ namespace }} {{ sa_name }}
+        eks.amazonaws.com/role-arn={{ efs_role_arn }}
+        --overwrite
+
+    - name: Restart EFS deployment to refresh IRSA token
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config rollout restart deployment/efs-csi-controller -n {{ namespace }}
+
+    - name: Annotate EFS service account with IRSA role
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config annotate serviceaccount -n {{ namespace }} {{ efs_csi_node_sa_name }}
+        eks.amazonaws.com/role-arn={{ efs_csi_node_role_arn }}
+        --overwrite
+
+    - name: Restart EFS csi node
+      ansible.builtin.shell: >
+        kubectl --kubeconfig /root/.kube/config rollout restart ds efs-csi-node -n {{ namespace }}        
+
+    - name: Ensure git is installed
+      yum:
+        name: git
+        state: present
+      vars:
+        ansible_python_interpreter: /usr/bin/python2
+
+    - name: Clone the private repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest_dir }}"
+        version: "{{ branch }}"  # or any branch/tag you want to checkout
+        force: yes
+
+    - name: Ensure required Python packages are installed
+      pip:
+        name:
+          - openshift
+          - kubernetes
+          - pyyaml
+        executable: pip3
+
+    - name: Apply all resources from single YAML file
+      k8s:
+        state: present
+        src: "{{ obj_def_path }}/{{ manifest_file }}"
+        apply: true
+
+    - name: Create Storage Class for EFS
+      ansible.builtin.shell: >
+        aws eks update-kubeconfig
+        --region {{ region }}
+        --name {{ cluster_name }}      
+
+    - name: Remove a directory and all its contents
+      ansible.builtin.file:
+        path: "{{ dest_dir }}"
+        state: absent
