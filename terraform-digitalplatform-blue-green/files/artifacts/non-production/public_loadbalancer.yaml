@@ -7,7 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pub-digitalcore
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: subnet-014c7a7ce9ca18896, subnet-0033c03188b23e4dd, subnet-055487844714a6aeb # digital-core-bg-b-subnet-pubalb-b
+    alb.ingress.kubernetes.io/subnets: subnet-03d292973bf3dd008, subnet-022031cf7cf638f9f, subnet-0ccbd946be20eeff9 # digital-core-bg-g-subnet-pubalb-g
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
   name: digital-core-public-alb-ingress
