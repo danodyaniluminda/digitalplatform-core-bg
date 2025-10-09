@@ -1,0 +1,42 @@
+- name: Install Kubecost to EKS
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    kubecost_version: "{{ kubecost_version | default('2.1.1') }}"
+
+  tasks:
+    - name: install pre-requisites
+      pip:
+        name:
+          - openshift
+          - pyyaml
+          - kubernetes
+          - urllib3==1.26.18
+        executable: pip3
+
+    - name: Add Kubecost Helm Repository and Install
+      ansible.builtin.shell: |
+        helm repo add kubecost https://kubecost.github.io/cost-analyzer/
+        helm repo update
+        helm upgrade -i kubecost kubecost/cost-analyzer \
+        --namespace {{ namespace }} \
+        --version {{ kubecost_version }} \
+        --set kubecostFrontend.enabled=true \
+        --set kubecostModel.enabled=true \
+        --set persistentVolume.enabled=true \
+        --set persistentVolume.size=10Gi \
+        --set ingress.enabled=false \
+        --set service.type=ClusterIP \
+        --set prometheus.server.persistentVolume.enabled=true \
+        --set prometheus.server.persistentVolume.size=10Gi \
+        --set prometheus.alertmanager.persistentVolume.enabled=true \
+        --set prometheus.alertmanager.persistentVolume.size=2Gi \
+        --set networkCosts.enabled=true \
+        --set networkCosts.podMonitor.enabled=true \
+        --set kubecostProductConfigs.clusterName={{ cluster_name }} \
+        --set reporting.logCollection=true
+      args:
+        executable: /bin/bash
+      environment:
+        KUBECONFIG: /root/.kube/config

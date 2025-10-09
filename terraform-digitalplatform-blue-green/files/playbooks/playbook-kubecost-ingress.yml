@@ -1,0 +1,45 @@
+---
+- name: Deploy Kubecost Ingress
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    repo_url: "https://github.com/danodyaniluminda/digitalplatform-core-bg.git"
+    dest_dir: "/root/bluegreenaws"
+    obj_def_path: "/root/bluegreenaws/terraform-digitalplatform-blue-green/files/artifacts/non-production"
+    obj_def_list:
+      - kubecost_ingress.yaml
+    branch: "main"
+
+  tasks:
+    - name: install pre-requisites
+      pip:
+        name:
+          - openshift
+          - pyyaml
+          - kubernetes
+          - urllib3==1.26.18
+        executable: pip3
+
+    - name: Extract cluster color from cluster name
+      set_fact:
+        cluster_color: "{{ cluster_name.split('-')[2] }}"  # Extracts 'b' or 'g' from digital-core-bg-b-eks-nprod-dev
+
+    - name: Clone the repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest_dir }}"
+        version: "{{ branch }}"
+        force: yes
+
+    - name: Create kubecost ingress from template
+      template:
+        src: "{{ obj_def_path }}/kubecost_ingress.yaml.j2"
+        dest: "{{ obj_def_path }}/kubecost_ingress.yaml"
+
+    - name: Deploy Kubecost Ingress
+      k8s:
+        src: "{{ obj_def_path }}/{{ item }}"
+        state: present
+        apply: true
+      loop: "{{ obj_def_list }}"
