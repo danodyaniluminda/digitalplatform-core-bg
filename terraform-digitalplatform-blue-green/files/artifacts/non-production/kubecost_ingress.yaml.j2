@@ -7,14 +7,14 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pub-digitalcore
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: subnet-03d292973bf3dd008, subnet-022031cf7cf638f9f, subnet-0ccbd946be20eeff9
+    alb.ingress.kubernetes.io/subnets: subnet-014c7a7ce9ca18896, subnet-055487844714a6aeb, subnet-0033c03188b23e4dd
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
   name: kubecost-public-alb-ingress
   namespace: kubecost
 spec:
   rules:
-  - host: kubecost-{{ cluster_color }}.059523608855.dncdnsa.net  # This will be kubecost-b.059523608855.dncdnsa.net or kubecost-g.059523608855.dncdnsa.net
+  - host: kubecost-{{ cluster_color }}.342262165274.dncdnsa.net  # This will be kubecost-b.342262165274.dncdnsa.net or kubecost-g.342262165274.dncdnsa.net
     http:
       paths:
       - backend:
