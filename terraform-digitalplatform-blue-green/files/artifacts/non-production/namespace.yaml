@@ -4,3 +4,17 @@ metadata:
   name: alb-qa
   labels:
     name: alb-qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubecost
+  labels:
+    name: kubecost
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alb-dev
+  labels:
+    name: alb-dev
