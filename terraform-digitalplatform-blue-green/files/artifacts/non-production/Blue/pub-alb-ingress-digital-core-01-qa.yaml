@@ -11,7 +11,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
   name: pub-alb-ingress-digital-core-01-qa
-  namespace: alb-dev
+  namespace: alb-qa
 spec:
   rules:
   - http:
