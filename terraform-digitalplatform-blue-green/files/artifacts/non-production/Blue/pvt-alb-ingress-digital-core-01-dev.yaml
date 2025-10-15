@@ -7,7 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/group.name: digitalcore-dev
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/subnets: subnet-014c7a7ce9ca18896, subnet-055487844714a6aeb, subnet-0033c03188b23e4dd
+    alb.ingress.kubernetes.io/subnets: subnet-025cff0e891698e05, subnet-0b3222c70f626e12a, subnet-06f41f3e4588bf967
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
   name: pvt-alb-ingress-digital-core-01-dev
