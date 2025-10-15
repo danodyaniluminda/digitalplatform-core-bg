@@ -10,7 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/subnets: subnet-03d292973bf3dd008, subnet-022031cf7cf638f9f, subnet-0ccbd946be20eeff9
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-  name: digital-core-public-alb-ingress
+  name: pub-alb-ingress-digital-core-01-dev
   namespace: alb-dev
 spec:
   rules:
