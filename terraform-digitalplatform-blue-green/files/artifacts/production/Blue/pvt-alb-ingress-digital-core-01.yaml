@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   annotations:
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":{ "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:342262165274:certificate/1c4d3a13-b740-4109-bc85-39e7700b0cf2
-    alb.ingress.kubernetes.io/group.name: pub-digitalcore
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:920971364038:certificate/42df3545-ae1c-4855-8da7-6e24d9a78d98
+    alb.ingress.kubernetes.io/group.name: digitalcore-prod
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: subnet-03d292973bf3dd008, subnet-022031cf7cf638f9f, subnet-0ccbd946be20eeff9
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: subnet-0f76fd127cba9ed5f, subnet-01255bd55ec4becad, subnet-07e4065531192831f
     alb.ingress.kubernetes.io/target-type: ip
     kubernetes.io/ingress.class: alb
-  name: digital-core-public-alb-ingress
-  namespace: alb-qa
+  name: pvt-alb-ingress-digital-core-01
+  namespace: alb-prod
 spec:
   rules:
   - http:
