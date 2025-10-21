@@ -34,8 +34,8 @@ spec:
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: prometheus-server
+            name: prometheus-operator-kube-p-prometheus
             port:
-              number: 80
+              number: 9090
         path: /*
         pathType: ImplementationSpecific
