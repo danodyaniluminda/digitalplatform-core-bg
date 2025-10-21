@@ -4,9 +4,9 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":{ "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:342262165274:certificate/477b1adb-ad10-432d-b5e5-4b7932faa100
-    alb.ingress.kubernetes.io/group.name: pub-digitalcore
+    alb.ingress.kubernetes.io/group.name: digitalcore
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/subnets: subnet-00e9baa73310c358f, subnet-022856e176635c17d, subnet-047cbea0c439fe875
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
