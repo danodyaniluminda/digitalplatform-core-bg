@@ -33,6 +33,15 @@ config:
         K8S-Logging.Parser On
         Keep_Log Off
 
+  outputs: |
+    [OUTPUT]
+        Name cloudwatch_logs
+        Match kube.*
+        region ap-southeast-1
+        log_group_name /aws/containerinsights/{{ cluster_name }}/application
+        log_stream_prefix from-fluent-bit-
+        auto_create_group true
+
   customParsers: |
     [PARSER]
         Name docker
