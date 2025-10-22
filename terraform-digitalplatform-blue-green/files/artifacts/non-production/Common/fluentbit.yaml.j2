@@ -35,7 +35,7 @@ config:
 
   outputs: |
     [OUTPUT]
-        Name cloudwatch
+        Name cloudwatch_logs
         Match kube.*
         region ap-southeast-1
         log_group_name /aws/containerinsights/{{ cluster_name }}/application
