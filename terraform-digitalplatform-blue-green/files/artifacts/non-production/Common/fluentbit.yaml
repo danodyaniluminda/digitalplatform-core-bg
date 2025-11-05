@@ -42,6 +42,24 @@ config:
         log_stream_prefix from-fluent-bit-
         auto_create_group true
 
+    [OUTPUT]
+        Name opensearch
+        Match kube.*
+        Host {{ opensearch_endpoint }}
+        Port 443
+        Index {{ cluster_name }}-logs
+        Type _doc
+        AWS_Auth On
+        AWS_Region ap-southeast-1
+        tls On
+        tls.verify On
+        Suppress_Type_Name On
+        Logstash_Format On
+        Logstash_Prefix {{ cluster_name }}-logs
+        Time_Key @timestamp
+        Replace_Dots On
+        Trace_Error On
+
   customParsers: |
     [PARSER]
         Name docker
