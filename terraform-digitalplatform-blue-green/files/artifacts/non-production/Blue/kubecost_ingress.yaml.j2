@@ -8,7 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/subnets: subnet-014c7a7ce9ca18896, subnet-055487844714a6aeb, subnet-0033c03188b23e4dd
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/healthcheck-path: /overview
+    alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
     alb.ingress.kubernetes.io/healthcheck-port: traffic-port
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
@@ -18,7 +18,7 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=60
     kubernetes.io/ingress.class: alb
   name: kubecost-pvt-alb-ingress
-  namespace: kubecost
+  namespace: {{ namespace }}
 spec:
   rules:
   - host: kubecost-{{ cluster_color }}.342262165274.dncdnsa.net  # This will be kubecost-b.342262165274.dncdnsa.net or kubecost-g.342262165274.dncdnsa.net
