@@ -2,9 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    alb.ingress.kubernetes.io/group.name: pub-digitalcore
+    alb.ingress.kubernetes.io/group.name: pvt-digitalcore
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/subnets: subnet-014c7a7ce9ca18896, subnet-055487844714a6aeb, subnet-0033c03188b23e4dd
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
@@ -17,7 +17,7 @@ metadata:
     alb.ingress.kubernetes.io/success-codes: "200,301,302"
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=60
     kubernetes.io/ingress.class: alb
-  name: kubecost-public-alb-ingress
+  name: kubecost-pvt-alb-ingress
   namespace: kubecost
 spec:
   rules:
