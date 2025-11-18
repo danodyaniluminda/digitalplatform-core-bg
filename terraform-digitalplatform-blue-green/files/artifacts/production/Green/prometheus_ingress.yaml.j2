@@ -3,11 +3,11 @@ kind: Ingress
 metadata:
   annotations:
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":{ "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:342262165274:certificate/1c4d3a13-b740-4109-bc85-39e7700b0cf2
-    alb.ingress.kubernetes.io/group.name: pub-digitalcore
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:920971364038:certificate/0982b3da-0fc0-4cb4-b1a5-56e3a24b0cb4
+    alb.ingress.kubernetes.io/group.name: digitalcore-prod
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: subnet-03d292973bf3dd008, subnet-0ccbd946be20eeff9, subnet-022031cf7cf638f9f
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: subnet-0111fa5166d2f22df, subnet-0b2160861e1a7273e, subnet-0a4bf26df408136ba
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-path: /api/v1/status/config
@@ -18,11 +18,11 @@ metadata:
     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
     alb.ingress.kubernetes.io/success-codes: "200"
     kubernetes.io/ingress.class: alb
-  name: prometheus-public-alb-ingress
-  namespace: kubecost
+  name: grafana-digitalcore
+  namespace: monitoring
 spec:
   rules:
-  - host: prometheus-{{ cluster_color }}.342262165274.dncdnsa.net
+  - host: prometheus-digitalcore-bg-g.dialog.lk
     http:
       paths:
       - backend:
@@ -34,8 +34,8 @@ spec:
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: kubecost-prometheus-server
+            name: prometheus-operator-kube-p-prometheus
             port:
-              number: 80
+              number: 9000
         path: /*
         pathType: ImplementationSpecific
