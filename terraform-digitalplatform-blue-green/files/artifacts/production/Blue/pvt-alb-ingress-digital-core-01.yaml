@@ -9,7 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/subnets: subnet-0f76fd127cba9ed5f, subnet-01255bd55ec4becad, subnet-07e4065531192831f
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=digital-platforms-bg-b-alb-logs,access_logs.s3.prefix=production/blue/alb
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=digital-platforms-bg-b-alb-logs,access_logs.s3.prefix=production/blue/alb/pvt-alb-ingress-digital-core-01
     kubernetes.io/ingress.class: alb
   name: pvt-alb-ingress-digital-core-01
   namespace: alb-prod
