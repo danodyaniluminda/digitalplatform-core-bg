@@ -57,6 +57,11 @@ config:
 
   filters: |
     [FILTER]
+        Name                record_modifier
+        Match               application.*
+        Record              cluster_name ${CLUSTER_NAME}
+
+    [FILTER]
         Name                kubernetes
         Match               application.*
         Kube_URL            https://kubernetes.default.svc:443
