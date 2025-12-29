@@ -47,16 +47,7 @@ config:
         Emitter_Name re_emitted
 
   outputs: |
-    # [OUTPUT]
-    #     Name cloudwatch_logs
-    #     Match kube.*
-    #     region ap-southeast-1
-    #     log_group_name /aws/containerinsights/{{ cluster_name }}/application
-    #     log_stream_prefix from-fluent-bit-
-    #     auto_create_group true
-    #     log_retention_days 3
-
-      [OUTPUT]
+    [OUTPUT]
         Name s3
         Match application.*
         bucket digital-core-bg-s3-dev-stdout
