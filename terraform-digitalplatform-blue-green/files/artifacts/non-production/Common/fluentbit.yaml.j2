@@ -33,14 +33,42 @@ config:
         K8S-Logging.Parser On
         Keep_Log Off
 
-  outputs: |
-    [OUTPUT]
-        Name cloudwatch_logs
+    [FILTER]
+        Name record_modifier
         Match kube.*
+        Record cluster_name {{ cluster_name }}
+        Record environment {{ environment }}
+        Record deployment blue
+
+    [FILTER]
+        Name rewrite_tag
+        Match kube.*
+        Rule $kubernetes['namespace_name'] .* application.$kubernetes['namespace_name'] false
+        Emitter_Name re_emitted
+
+  outputs: |
+    # [OUTPUT]
+    #     Name cloudwatch_logs
+    #     Match kube.*
+    #     region ap-southeast-1
+    #     log_group_name /aws/containerinsights/{{ cluster_name }}/application
+    #     log_stream_prefix from-fluent-bit-
+    #     auto_create_group true
+    #     log_retention_days 3
+
+      [OUTPUT]
+        Name s3
+        Match application.*
+        bucket digital-core-bg-s3-dev-stdout
         region ap-southeast-1
-        log_group_name /aws/containerinsights/{{ cluster_name }}/application
-        log_stream_prefix from-fluent-bit-
-        auto_create_group true
+        store_dir /var/log/s3-dte
+        store_dir_limit_size 300M
+        upload_timeout 1m
+        total_file_size 10M
+        use_put_object On
+        s3_key_format /application-logs/%Y/%m/%d/%H/%M/%S/$UUID.json
+        json_date_key date
+        json_date_format iso8601
 
   customParsers: |
     [PARSER]
