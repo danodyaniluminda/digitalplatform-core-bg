@@ -96,9 +96,7 @@ config:
         store_dir_limit_size 300M
         upload_timeout      60s
         total_file_size     5MB
-
-        s3_key_format       $kubernetes['namespace_name']/$kubernetes['container_name']/%Y%m%d%H%M-$UUID.json.gz
-
+        s3_key_format       /%Y%m%d%H%M-$UUID.json.gz
         compression         gzip
         content_type        application/json
         json_date_key       timestamp
