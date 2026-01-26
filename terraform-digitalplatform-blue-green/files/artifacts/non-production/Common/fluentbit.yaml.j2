@@ -87,6 +87,21 @@ config:
         store_dir_limit_size 300M
         upload_timeout      1m
 
+    [OUTPUT]
+      Name                s3
+      Match               application.*
+      bucket              digitalcore-bg-s3-dev-stdout
+      region              ${AWS_REGION}
+      store_dir           /var/log/s3-sentinel
+      store_dir_limit_size 300M
+      upload_timeout      60s
+      total_file_size     5MB
+      s3_key_format       /application/%Y/%m/%d/%H/%M/%S-$UUID.json.gz
+      compression         gzip
+      content_type        application/json
+      json_date_key       timestamp
+      json_date_format    iso8601
+
   customParsers: |
     [PARSER]
         Name docker
