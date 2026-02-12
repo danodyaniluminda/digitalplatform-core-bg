@@ -78,31 +78,30 @@ config:
         Buffer_Size         0
 
     [FILTER]
-      Name                  multiline
-      Match                 application.*
-      multiline.key_content log
-      multiline.parser      java_multiline
-      emitter_name          multiline_for_java
-      emitter_mem_buf_limit 50MB
-
-
-    [FILTER]
-      Name                modify
-      Match               dataplane.systemd.*
-      Rename              _HOSTNAME                   hostname
-      Rename              _SYSTEMD_UNIT               systemd_unit
-      Rename              MESSAGE                     message
-      Remove_regex        ^((?!hostname|systemd_unit|message).)*$
+        Name                  multiline
+        Match                 application.*
+        multiline.key_content log
+        multiline.parser      java_multiline
+        emitter_name          multiline_for_java
+        emitter_mem_buf_limit 50MB
 
     [FILTER]
-      Name                aws
-      Match               dataplane.*
-      imds_version        v2
+        Name                modify
+        Match               dataplane.systemd.*
+        Rename              _HOSTNAME                   hostname
+        Rename              _SYSTEMD_UNIT               systemd_unit
+        Rename              MESSAGE                     message
+        Remove_regex        ^((?!hostname|systemd_unit|message).)*$
 
     [FILTER]
-      Name                aws
-      Match               host.*
-      imds_version        v2
+        Name                aws
+        Match               dataplane.*
+        imds_version        v2
+
+    [FILTER]
+        Name                aws
+        Match               host.*
+        imds_version        v2
 
   outputs: |
     [OUTPUT]
