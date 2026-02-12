@@ -85,6 +85,7 @@ config:
       emitter_name          multiline_for_java
       emitter_mem_buf_limit 50MB
 
+
     [FILTER]
       Name                modify
       Match               dataplane.systemd.*
@@ -112,6 +113,7 @@ config:
         store_dir           /var/log/s3-dte
         store_dir_limit_size 300M
         upload_timeout      1m
+
 
 
     [OUTPUT]
